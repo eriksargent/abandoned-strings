@@ -39,9 +39,12 @@ func findFilesIn(_ directories: [String], withExtensions extensions: [String]) -
 
 func contentsOfFile(_ filePath: String) -> String {
     do {
-        return try String(contentsOfFile: filePath, encoding: String.Encoding.utf8)
+        return try String(contentsOfFile: filePath)
     }
-    catch { return "" }
+    catch { 
+        print("cannot read file!!!")
+        exit(1)
+    }
 }
 
 func concatenateAllSourceCodeIn(_ directories: [String], withStoryboard: Bool) -> String {
@@ -70,7 +73,7 @@ func extractStringIdentifiersFrom(_ stringsFile: String) -> [String] {
 func extractStringIdentifierFromTrimmedLine(_ line: String) -> String {
     let indexAfterFirstQuote = line.index(after: line.startIndex)
     let lineWithoutFirstQuote = line[indexAfterFirstQuote...]
-    let endIndex = lineWithoutFirstQuote.index(of:"\"")!
+    let endIndex = lineWithoutFirstQuote.firstIndex(of:"\"")!
     let identifier = lineWithoutFirstQuote[..<endIndex]
     return String(identifier)
 }
@@ -136,7 +139,7 @@ func getRootDirectories() -> [String]? {
         c.removeLast()
     }
     if isOptionaParameterForWritingAvailable() {
-        c.remove(at: c.index(of: "write")!)
+        c.remove(at: c.firstIndex(of: "write")!)
     }
     return c
 }
